@@ -1,0 +1,6 @@
+{
+  "name": "Tinder Health",
+  "description": "Nigeria's first healthcare platform bridging the gap between verified specialists and patients through extreme price transparency and AI-driven matching.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
