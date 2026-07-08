@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { sendAdminNotification, sendUserConfirmation } from "../lib/email";
-import { sendToFormspree } from "../lib/formspree";
+import { sendAdminNotification, sendUserConfirmation } from "../lib/email.js";
+import { sendToFormspree } from "../lib/formspree.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS support
@@ -75,14 +75,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   return res.status(201).json({
-  success: true,
-  application: {
-    id: `TH-${Date.now()}`,
-    fullName,
-    workEmail,
-    role,
-    investmentAmount: investmentAmount || null,
-    submittedAt,
-  },
-});
+    success: true,
+    application: {
+      id: `TH-${Date.now()}`,
+      fullName,
+      workEmail,
+      role,
+      investmentAmount: investmentAmount || null,
+      submittedAt,
+    },
+  });
 }
