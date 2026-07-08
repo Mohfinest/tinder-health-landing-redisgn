@@ -10,7 +10,6 @@ import Problem from './components/Problem';
 import Journey from './components/Journey';
 import Services from './components/Services';
 import Trust from './components/Trust';
-import ConsultationMatcher from './components/ConsultationMatcher';
 import MapGIS from './components/MapGIS';
 import BusinessModel from './components/BusinessModel';
 import Team from './components/Team';
@@ -90,9 +89,6 @@ export default function App() {
 
         {/* 3.2. Verification & Safety standards */}
         <Trust />
-
-        {/* 3.5. Tinder-Style Swipe Consultation Matcher */}
-        <ConsultationMatcher onMatchDoctor={handleOpenDoctorProfile} />
 
         {/* 3.8. Patient Data Capture Matching Flow */}
         <TryItNow />
