@@ -25,6 +25,7 @@ export default function Hero({ onSearchQuerySubmit, onOpenDoctorProfile, onOpenC
   const [investmentAmount, setInvestmentAmount] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [appliedTicket, setAppliedTicket] = useState<any | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Find Dr. Folake Adeyemi from our doctor list to display as featured
   const featuredDoc = doctorsData.find((d) => d.id === 'dr-folake-adeyemi') || doctorsData[0];
@@ -46,6 +47,7 @@ export default function Hero({ onSearchQuerySubmit, onOpenDoctorProfile, onOpenC
     }
 
     setSubmitting(true);
+    setSubmitError(null);
 
     try {
       const response = await fetch('/api/waitlist', {
@@ -65,16 +67,17 @@ export default function Hero({ onSearchQuerySubmit, onOpenDoctorProfile, onOpenC
 
       const data = await response.json();
 
-console.log(data);
-
-setAppliedTicket({
-  id: `TH-${Date.now()}`,
-  fullName,
-  workEmail,
-  role,
-  investmentAmount: role === "Investor" ? investmentAmount : null,
-  submittedAt: new Date().toISOString(),
-});
+      setAppliedTicket({
+        id: `TH-${Date.now()}`,
+        fullName,
+        workEmail,
+        role,
+        investmentAmount: role === "Investor" ? investmentAmount : null,
+        submittedAt: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("Waitlist submission error:", err);
+      setSubmitError("Something went wrong submitting your application. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -232,6 +235,12 @@ setAppliedTicket({
                             id="waitlist-investment-amount"
                           />
                         </div>
+                      </div>
+                    )}
+
+                    {submitError && (
+                      <div className="text-xs text-red-500 font-sans text-center">
+                        {submitError}
                       </div>
                     )}
 
