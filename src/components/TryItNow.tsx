@@ -8,8 +8,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   User, Phone, MapPin, Activity, Sparkles, CheckCircle, 
   ArrowRight, ArrowLeft, RefreshCw, Star, Clock, Heart, 
-  ExternalLink, Mail, PhoneCall, HelpCircle, ShieldAlert
+  ExternalLink, Mail, PhoneCall, HelpCircle, ShieldAlert, Building2
 } from 'lucide-react';
+import { doctorsData } from '../data/doctors';
+import { Doctor } from '../types';
 
 const NIGERIAN_STATES = [
   "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", 
@@ -25,137 +27,6 @@ const HEALTH_CONCERNS = [
   "Stomach pain", "Other"
 ];
 
-// Mock Provider database for matching (Step 4)
-const MOCK_PROVIDERS: Record<string, Array<{
-  name: string;
-  specialist: string;
-  distance: string;
-  price: string;
-  hours: string;
-  services: string[];
-  image: string;
-  phone: string;
-}>> = {
-  "Dentist": [
-    {
-      name: "Dr. Okey Bakassi",
-      specialist: "Dental Surgeon",
-      distance: "1.4 km away",
-      price: "₦4,500 per consult",
-      hours: "8:00 AM - 5:00 PM",
-      services: ["Root Canal", "Tooth Extraction", "Emergency Pain Management"],
-      image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 803 111 2222"
-    },
-    {
-      name: "Dr. Lilian Esoro",
-      specialist: "Cosmetic Orthodontist",
-      distance: "2.8 km away",
-      price: "₦5,000 per consult",
-      hours: "9:00 AM - 6:00 PM",
-      services: ["Braces Assessment", "Oral Hygiene Cleansing", "Fluoride Treatment"],
-      image: "https://images.unsplash.com/photo-1594824813573-246434e33963?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 809 333 4444"
-    }
-  ],
-  "Cardiologist": [
-    {
-      name: "Dr. Chinedu Okafor",
-      specialist: "Cardiologist Specialist",
-      distance: "2.1 km away",
-      price: "₦4,800 per consult",
-      hours: "8:30 AM - 4:30 PM",
-      services: ["Hypertension Screening", "Preventative ECG", "Heart Failure Consult"],
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 802 555 6666"
-    }
-  ],
-  "Obstetrician & Gynecologist": [
-    {
-      name: "Dr. Funmi Oyelese",
-      specialist: "Maternal Health Consultant",
-      distance: "1.9 km away",
-      price: "₦4,500 per consult",
-      hours: "8:00 AM - 4:00 PM",
-      services: ["Prenatal Screenings", "High-Risk Pregnancy Consult", "Fertility Counseling"],
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 812 777 8888"
-    }
-  ],
-  "Oncologist": [
-    {
-      name: "Dr. Folake Adeyemi",
-      specialist: "Oncology & Chemotherapy Specialist",
-      distance: "3.2 km away",
-      price: "₦4,900 per consult",
-      hours: "9:00 AM - 5:00 PM",
-      services: ["Tumor Assessment", "Immunotherapy Consulting", "Breast Cancer Management"],
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 815 999 0000"
-    }
-  ],
-  "Ophthalmologist": [
-    {
-      name: "Dr. Abdul Yusuf",
-      specialist: "Ophthalmic Surgeon",
-      distance: "2.0 km away",
-      price: "₦3,800 per consult",
-      hours: "8:00 AM - 4:30 PM",
-      services: ["Glaucoma Screening", "Dry Eye Management", "Cataract Assessment"],
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 803 222 3333"
-    }
-  ],
-  "Pediatric Specialist": [
-    {
-      name: "Dr. Amina Bello",
-      specialist: "Neonatal & Pediatric Care",
-      distance: "1.1 km away",
-      price: "₦3,500 per consult",
-      hours: "8:30 AM - 5:30 PM",
-      services: ["Childhood Immunization", "Neonatal Growth Checkups", "Asthma Support"],
-      image: "https://images.unsplash.com/photo-1631856955409-a1728db1978d?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 809 444 5555"
-    }
-  ],
-  "Dermatologist": [
-    {
-      name: "Dr. Emeka Nwachukwu",
-      specialist: "Clinical Dermatologist",
-      distance: "2.5 km away",
-      price: "₦4,000 per consult",
-      hours: "9:00 AM - 5:00 PM",
-      services: ["Acne Regimen", "Chronic Eczema Care", "Tropical Infection Assessment"],
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 811 555 7777"
-    }
-  ],
-  "Orthopedic Surgeon": [
-    {
-      name: "Dr. Tunde Alabi",
-      specialist: "Orthopedic Specialist",
-      distance: "1.5 km away",
-      price: "₦4,500 per consult",
-      hours: "8:00 AM - 4:00 PM",
-      services: ["Joint Pain Rehabilitation", "Sports Fracture Management", "Postural Care"],
-      image: "https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 805 888 9999"
-    }
-  ],
-  "General Practitioner": [
-    {
-      name: "Dr. Halima Sani",
-      specialist: "Internal Medicine Expert",
-      distance: "3.0 km away",
-      price: "₦3,000 per consult",
-      hours: "8:00 AM - 6:00 PM",
-      services: ["General Consultation", "Malaria/Typhoid Care", "Preventative Care"],
-      image: "https://images.unsplash.com/photo-1622902047476-7151b6042426?q=80&w=300&auto=format&fit=crop",
-      phone: "+234 808 999 8888"
-    }
-  ]
-};
-
 const CONCERN_METADATA: Record<string, { emoji: string; desc: string }> = {
   "Tooth pain": { emoji: "🦷", desc: "Dental pain & gum swelling" },
   "Back pain": { emoji: "🦴", desc: "Spine, posture or joints" },
@@ -170,6 +41,23 @@ const CONCERN_METADATA: Record<string, { emoji: string; desc: string }> = {
   "Stomach pain": { emoji: "🤢", desc: "Ulcer, digestive tract or gut" },
   "Other": { emoji: "❓", desc: "Describe specific custom issue" }
 };
+
+// Match real doctors from our verified roster based on the AI-recommended specialty.
+// Falls back to top-rated doctors across the roster if no exact specialty match exists yet.
+function getMatchingDoctors(specialty: string): Doctor[] {
+  const specialtyLower = specialty.toLowerCase();
+
+  const exactMatches = doctorsData.filter((doc) =>
+    doc.specialty.toLowerCase().includes(specialtyLower) ||
+    specialtyLower.includes(doc.specialty.toLowerCase())
+  );
+
+  if (exactMatches.length > 0) return exactMatches;
+
+  // No verified specialist for this concern yet — surface our highest-rated doctors
+  // as a starting point rather than showing nothing.
+  return [...doctorsData].sort((a, b) => b.rating - a.rating).slice(0, 2);
+}
 
 export default function TryItNow() {
   const [step, setStep] = useState(1);
@@ -189,7 +77,7 @@ export default function TryItNow() {
   // Matching results from API
   const [aiRecommendation, setAiRecommendation] = useState('');
   const [recommendedSpecialist, setRecommendedSpecialist] = useState('');
-  const [matchedProviders, setMatchedProviders] = useState<any[]>([]);
+  const [matchedProviders, setMatchedProviders] = useState<Doctor[]>([]);
   const [savedTicket, setSavedTicket] = useState<any | null>(null);
 
   // Validation helper
@@ -258,10 +146,7 @@ export default function TryItNow() {
       const data = await response.json();
       setAiRecommendation(data.recommendation);
       setRecommendedSpecialist(data.specialist);
-
-      // Extract provider cards dynamically
-      let matchedList = MOCK_PROVIDERS[data.specialist] || MOCK_PROVIDERS["General Practitioner"];
-      setMatchedProviders(matchedList);
+      setMatchedProviders(getMatchingDoctors(data.specialist));
       setStep(3);
 
     } catch (err: any) {
@@ -301,7 +186,7 @@ export default function TryItNow() {
 
       setRecommendedSpecialist(spec);
       setAiRecommendation(rec);
-      setMatchedProviders(MOCK_PROVIDERS[spec] || MOCK_PROVIDERS["General Practitioner"]);
+      setMatchedProviders(getMatchingDoctors(spec));
       setStep(3);
     } finally {
       setLoading(false);
@@ -392,7 +277,7 @@ export default function TryItNow() {
             Consultation Matching Engine
           </h2>
           <p className="text-slate-500 font-sans text-sm md:text-base max-w-xl mx-auto">
-            Input your symptoms to securely run our AI clinical specialist matching engine and locate nearby verified doctors instantly.
+            Input your symptoms to securely run our AI clinical specialist matching engine and locate verified doctors on our roster.
           </p>
         </div>
 
@@ -474,7 +359,7 @@ export default function TryItNow() {
                     <div className="space-y-1">
                       <h4 className="text-xs font-bold text-[#227aba] uppercase tracking-wider font-mono">Dr. Nia • Your Health Assistant</h4>
                       <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                        Welcome to Tinder Health! Please fill out your contact profile below. This lets our matching system securely locate verified specialists in your exact vicinity.
+                        Welcome to Tinder Health! Please fill out your contact profile below. This lets our matching system securely locate verified specialists on our roster.
                       </p>
                     </div>
                   </div>
@@ -781,7 +666,7 @@ export default function TryItNow() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-sans">
-                        Available {recommendedSpecialist}s Near You
+                        Verified {recommendedSpecialist}s On Our Roster
                       </h4>
                       <span className="text-[11px] font-bold text-[#74b645] bg-[#74b645]/10 px-2 py-0.5 rounded-full">
                         {matchedProviders.length} Matches Found
@@ -789,68 +674,62 @@ export default function TryItNow() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {matchedProviders.map((prov, index) => (
+                      {matchedProviders.map((doc) => (
                         <div 
-                          key={index}
+                          key={doc.id}
                           className="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 hover:border-[#227aba]/40 transition-colors hover:shadow-md"
                         >
                           <img 
-                            src={prov.image} 
-                            alt={prov.name} 
+                            src={doc.image} 
+                            alt={doc.name} 
+                            referrerPolicy="no-referrer"
                             className="w-16 h-16 rounded-xl object-cover self-start border border-slate-200"
                           />
                           <div className="flex-grow text-left space-y-2">
                             <div>
                               <div className="flex items-center justify-between">
-                                <h5 className="text-sm font-bold text-slate-800">{prov.name}</h5>
+                                <h5 className="text-sm font-bold text-slate-800">{doc.name}</h5>
                                 <span className="text-[10px] text-slate-500 font-sans font-semibold flex items-center gap-1">
-                                  <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" /> 4.9
+                                  <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" /> {doc.rating}
                                 </span>
                               </div>
-                              <p className="text-xs text-[#227aba] font-medium font-sans">{prov.specialist}</p>
+                              <p className="text-xs text-[#227aba] font-medium font-sans">{doc.specialty}</p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-y-1 gap-x-2 text-[11px] text-slate-500 font-sans">
+                            <div className="grid grid-cols-1 gap-y-1 text-[11px] text-slate-500 font-sans">
                               <span className="flex items-center gap-1">
-                                <MapPin className="w-3.5 h-3.5 text-slate-400" /> {prov.distance}
+                                <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" /> {doc.hospital}
                               </span>
                               <span className="flex items-center gap-1">
-                                <Clock className="w-3.5 h-3.5 text-slate-400" /> {prov.hours}
+                                <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" /> {doc.locationName}
                               </span>
-                              <span className="col-span-2 font-semibold text-slate-700">
-                                Price: {prov.price}
+                              <span className="font-semibold text-slate-700">
+                                Consult fee: ₦{doc.consultationFeeMin.toLocaleString()} - ₦{doc.consultationFeeMax.toLocaleString()}
                               </span>
                             </div>
 
-                            {/* Services taglist */}
+                            {/* Subspecialty taglist */}
                             <div className="flex flex-wrap gap-1">
-                              {prov.services.map((srv: string, sIdx: number) => (
+                              {doc.subspecialties.map((sub: string, sIdx: number) => (
                                 <span key={sIdx} className="text-[9px] bg-white border border-slate-150 px-1.5 py-0.5 rounded text-slate-500">
-                                  {srv}
+                                  {sub}
                                 </span>
                               ))}
                             </div>
 
-                            {/* Contact & Confirm buttons */}
-                            <div className="pt-2 flex gap-2">
-                              <a 
-                                href={`tel:${prov.phone}`}
-                                className="flex items-center justify-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg p-2 flex-grow text-center text-xs font-bold transition-all"
-                              >
-                                <PhoneCall className="w-3.5 h-3.5" />
-                                Call
-                              </a>
+                            {/* Request introduction */}
+                            <div className="pt-2">
                               <button
                                 type="button"
                                 disabled={saving}
-                                onClick={() => handleSaveAndNotify(prov.name)}
-                                className="bg-[#227aba] hover:bg-[#1a5f91] text-white text-xs font-bold px-3 py-2 rounded-lg flex-grow flex items-center justify-center gap-1 transition-all shadow-sm"
+                                onClick={() => handleSaveAndNotify(doc.name)}
+                                className="w-full bg-[#227aba] hover:bg-[#1a5f91] text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center justify-center gap-1 transition-all shadow-sm"
                               >
                                 {saving ? (
                                   <RefreshCw className="w-3 h-3 animate-spin" />
                                 ) : (
                                   <>
-                                    Book Match
+                                    Request Introduction
                                     <ExternalLink className="w-3 h-3" />
                                   </>
                                 )}
@@ -878,7 +757,7 @@ export default function TryItNow() {
                     onClick={() => handleSaveAndNotify("Direct Self-Consultation")}
                     className="flex items-center gap-1 px-5 py-3 rounded-xl font-sans text-sm font-semibold text-slate-500 hover:text-slate-800 transition-all"
                   >
-                    Skip Provider Booking
+                    Skip Provider Selection
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -900,10 +779,10 @@ export default function TryItNow() {
 
                   <div className="space-y-2">
                     <h3 className="text-2xl font-sans font-extrabold text-slate-900">
-                      Match Booked Successfully!
+                      Request Received!
                     </h3>
                     <p className="text-sm text-slate-500 font-sans">
-                      Your patient capture details have been recorded and sent to the Tinder Health clinical coordination team.
+                      Your details have been recorded and sent to the Tinder Health clinical coordination team.
                     </p>
                   </div>
 
@@ -940,14 +819,14 @@ export default function TryItNow() {
                         <span className="text-slate-700 italic font-medium">"{savedTicket.concern}"</span>
                       </div>
                       <div className="col-span-2 border-t border-slate-150 pt-3">
-                        <span className="text-slate-400 block font-semibold uppercase">Selected Clinic Provider</span>
+                        <span className="text-slate-400 block font-semibold uppercase">Requested Doctor</span>
                         <span className="text-[#74b645] font-extrabold text-sm">{savedTicket.chosenProvider || "Direct Self-Consultation"}</span>
                       </div>
                     </div>
                   </div>
 
                   <p className="text-[11px] text-slate-400 font-sans">
-                    A team coordinator will contact you at <strong>{savedTicket.phone}</strong> shortly to finalize details and schedule slot availability.
+                    A team coordinator will contact you at <strong>{savedTicket.phone}</strong> shortly to confirm your specialist and schedule your consultation.
                   </p>
                 </div>
 
