@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getGeminiClient } from "../lib/gemini";
-import { doctorSummaries } from "../lib/doctors";
+import { getGeminiClient } from "../lib/gemini.js";
+import { doctorSummaries } from "../lib/doctors.js";
 import { Type } from "@google/genai";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
